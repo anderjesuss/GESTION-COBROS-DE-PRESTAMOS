@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="~{plantilla/UITemplate :: cabecera(pageTitle='Solicitud de Prestamos')}">
+
+<body>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside th:insert="~{plantilla/UITemplate :: sidebar}"></aside>
+        <!-- End of Sidebar Section -->
+        
+        <!-- Main Content -->
+        <main>
+            <h1>Información</h1>
+            <div class="analyse">
+				<div class="sales">
+                    <div class="status">
+                        <div class="info">
+                            <h3>Total de Solicitudes</h3>
+                            <h1 style="text-align: center;" th:text="${cantidad}"></h1>
+                        </div>
+                        <div class="progresss">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="percentage">
+                                <p>+81%</p>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+			</div>
+            <!-- Recent Orders  -->
+            <div class="recent-orders">
+                <h2>Mis Solicitudes</h2>
+                <div class="notification add-reminder">
+				  <button class="custom-button btn-agregar">
+				    <span class="material-icons-sharp">
+				      add
+				    </span>
+				    <h3 class="title-button"><b>Nueva Solicitud</b></h3>
+				  </button>
+				</div>
+				<!-- Recent Orders Table -->
+                <table id="tableProducto">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Días</th>
+                            <th>Tasa</th>
+                            <th>Fecha</th>
+                            <th>Monto</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th>Ver</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<tr th:each="row:${solicitud}">
+							<td th:text="${row.codigo}"></td>
+							<td th:text="${row.dias}"></td>
+							<td>
+							    <span th:text="${row.tasa + '%'}"></span>
+							</td>
+							<td th:text="${row.fechaPrestamo}"></td>
+							<td th:text="${row.monto}"></td>
+							<td th:text="${row.tipoPrestamo.descripcion}"></td>
+							<td>
+							    <span th:if="${row.estado == 0}" style="color: yellow;">Pendiente</span>
+							    <span th:if="${row.estado == 1}" style="color: green;">Aprobado</span>
+							    <span th:if="${row.estado == 2}" style="color: red;">Cancelado</span>
+							</td>
+							<td><button class="btn-editar custom-button"><span class="material-icons-sharp">visibility</span></button></td>
+						</tr>
+					</tbody>
+                </table>
+            </div>
+            <!-- End of Recent Orders -->
+            
+            <!-- Formulario para eliminar 
+		    <form action="/prestamista/eliminar" method="post" id="form-eliminar">
+				<input type="hidden" name="codigoEliminar" id="codigo-eliminar">		
+			</form>
+			-->
+			
+            <!-- Paginación -->
+            <div class="pagination-container">
+			    <a class="prev">Anterior</a>
+			    <div class="pagination"></div>
+			    <a class="next">Siguiente</a>
+			</div>
+        </main>
+        <!-- End of Main Content -->
+        
+        <div class="modal" id="modalProducto">
+		        <form class="modal__container" id="idFormProducto" method="POST" action="/solicitud/grabar">
+						<h1 class="modal-title">Datos de la Solicitud</h1>
+						<hr class="modal-hr">
+						<div style="display: flex; margin-bottom: 15px ;">
+							<div class="info">
+		                        <b>Prestatario(a): <p th:text="${session.datosPrestatario}"></p></b>
+			                </div>
+			                <div class="info" style="margin-left: auto;">
+			                        <b>Tasa: <p>20% (Mensual)</p></b>
+			                </div>
+						</div>
+		            <div class="modal__inputs-2">
+						<div class="form-group caja">
+						    <div class="input-group has-validation">
+						        <label class="form-label"><b>Monto:</b></label>
+						        <input type="text" class="form-control" name="monto" id="idMonto" autocomplete="off" oninput="calcularInteres()">
+						    </div>
+						</div>
+						
+						<div class="form-group caja">
+						    <div class="input-group has-validation" style="display: flex;">
+						        <b>Interés:</b>
+						        <p id="interesCalculadoLabel" style="margin-left: 7px;"></p>
+						        <input type="hidden" id="interesCalculado" name="interes" readonly>
+						    </div>
+						</div>
+
+						
+						<div class="form-group caja">
+						    <div class="input-group has-validation">
+						        <label class="form-label"><b>Días:</b></label>
+						        <input type="text" class="form-control" name="dias" id="idDias" autocomplete="off" oninput="calcularInteres()">
+						    </div>
+						</div>
+					    
+						<div class="form-group caja">
+							<div class="input-group has-validation">
+								<label class="form-label"><b>Seleccione cuenta bancaria:</b></label>
+								<select id="idCuenta" name="cuenta" class="form-control">
+								    <option value=" ">[Seleccione Cuenta]</option>
+									<option th:each="row:${cuentas}" 
+											th:utext="${row.numeroCuenta}"
+											th:value="${row.codigo}"
+									
+									/>
+								</select>
+							</div>
+						</div>
+						<div class="form-group caja">
+							<div class="input-group has-validation">
+								<label class="form-label"><b>Tipo de préstamo:</b></label>
+								<select id="idTipo" name="tipo" class="form-control">
+								    <option value=" ">[Seleccione Tipo]</option>
+									<option th:each="row:${tipos}" 
+											th:utext="${row.descripcion}"
+											th:value="${row.codigo}"
+									/>
+								</select>
+							</div>
+						</div>
+						
+				      </div>
+				      <!-- Botones -->
+				      <div class="items-buttons">
+						  <button class="modal__close" id="btn-cerrar">Cerrar</button>
+						  <button class="modal__success" type="submit">Registrar</button>
+					  </div>   
+		        </form>
+		    </div>
+		    
+		    
+        <!-- Right Section -->
+        <div th:insert="~{plantilla/UITemplate :: section}"></div>
+    </div>
+    
+	<div th:insert="~{plantilla/UITemplate :: js}"></div>
+	<script th:src="@{/resources/js/pagination.js}"></script>
+	<script th:src="@{/resources/js/modal.js}"></script>
+	
+	 <!-- Right Section -->
+	<script th:inline="javascript" th:if="${MENSAJE!=null}">
+	    let msj;
+	    msj = /*[[${MENSAJE}]]*/
+	    Swal.fire({
+			/*position: 'bottom-end',*/
+	        position: 'top-end',
+	        icon: 'success',
+	        title: msj,
+	        showConfirmButton: false,
+	        timer: 1500
+	    });
+	</script>
+	
+	<script th:inline="javascript" th:if="${MENSAJE1!=null}">
+	    let msj1;
+	    msj1 = /*[[${MENSAJE1}]]*/
+	    Swal.fire({
+	        position: 'top-end',
+	        icon: 'error',
+	        title: msj1,
+	        showConfirmButton: false,
+	        timer: 1500
+	    });
+	</script>
+	
+	<script>
+		$(function() {
+			$('#idFechaVen').datepicker({
+				'format': 'yyyy-mm-dd',
+				'autoclose': true
+			});
+		});
+		$('#idFechaVen').on('changeDate show', function(e) {
+		    $('#idFormProducto').bootstrapValidator('revalidateField', $('#idFechaVen'));
+		});
+		
+		
+	</script>
+	
+	<!-- Acciones a los botones  -->
+	<script>
+		$(document).on("click","#btn-cerrar",function(){
+			$("#idContraseña").removeAttr("readonly");
+			$("#idFormProducto").trigger("reset");
+			$("#idFormProducto").data("bootstrapValidator").resetForm(true);
+			$("#idCodigo").val(0);
+			// Establecer el valor de categoría
+   			$("#idTipo").val($("select#idTipo option:first").val());
+   			$("#idCuenta").val($("select#idCuenta option:first").val());
+			window.onbeforeunload = null;
+		});	
+	</script>
+	
+	<script>
+	    function calcularInteres() {
+		    var monto = parseFloat(document.getElementById('idMonto').value);
+		    var dias = parseInt(document.getElementById('idDias').value);
+		    var tasa = 20; // Esto sale del 20%
+		
+		    // Calculamos acá el interés diario y total (Clase de profe)
+		    var tasaDiaria = Math.pow((tasa / 100.0 + 1), (1 / 30.0)) - 1;
+		    var interes = monto * tasaDiaria * dias;
+		
+		    // Obtener referencias a los elementos
+		    var interesCalculadoLabel = document.getElementById('interesCalculadoLabel');
+		    var interesCalculadoInput = document.getElementById('interesCalculado');
+		
+		    // Establecer el valor en el label y en el input
+		    interesCalculadoLabel.innerText = "S/ " + interes.toFixed(2);
+		    interesCalculadoInput.value = interes.toFixed(2);
+		}
+	</script>
+
+	
+<!--JESUS ALEJANDRO SANCHEZ ANAYA-->
+<!-- Validaciones -->
+<script>
+	$(document).ready(function () {
+		$('#idFormProducto').bootstrapValidator({    
+			feedbackIcons: {
+	                valid: 'glyphicon glyphicon-ok',
+	                invalid: 'glyphicon glyphicon-remove',
+	                validating: 'glyphicon glyphicon-refresh'
+	            },
+			fields: {
+				monto: {
+					selector: '#idMonto', 
+					validators: {
+						notEmpty: {
+							message: 'Porfavor, ingrese el monto del préstamo'
+						},
+						regexp: {
+							
+							regexp: /^(\d+|[0-9]+\.\d{1,2})$/,
+							message: 'Campo monto real hasta dos decimales'
+						},
+					}
+				},
+				dias: {
+					selector: '#idDias', 
+					validators: {
+						notEmpty: {
+							message: 'Porfavor, ingrese la cantidad de días'
+						},
+						regexp: {
+						    regexp: /^(1[5-9]|[2-9][0-9]|[1-2][0-9]{2}|3[0-5][0-9]|36[0-5])$/,
+						    message: 'El mínimo de días es 15 y máximo 365'
+						}
+					}
+				},
+				cuenta: {
+					selector: '#idCuenta', 
+					validators: {
+						notEmpty: {
+							message: 'Porfavor, seleccione el número de cuenta'
+						}
+					}
+				},
+				tipo: {
+					selector: '#idTipo', 
+					validators: {
+						notEmpty: {
+							message: 'Porfavor, seleccione el tipo de préstamo'
+						}
+					}
+				}
+			}
+		});
+
+		$('#modalProducto').on('hidden.bs.modal', function() {
+			$("#idFormProducto").bootstrapValidator('resetForm', true);
+			$("#idCodigo").val(0);
+		});
+	});
+</script>
+	
+</body>
+</html>

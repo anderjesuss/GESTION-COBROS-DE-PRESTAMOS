@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="~{plantilla/UITemplate :: cabecera(pageTitle='Registros de Pagos')}">
+
+<body>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside th:insert="~{plantilla/UITemplate :: sidebar}"></aside>
+        <!-- End of Sidebar Section -->
+        
+        <!-- Main Content -->
+        <main>
+            <h1>Información</h1>
+            <div class="analyse">
+				<div class="sales">
+                    <div class="status">
+                        <div class="info">
+                            <h3>Total de Cuotas</h3>
+                            <h1 style="text-align: center;" th:text="${cantidadCuotas}"></h1>
+                        </div>
+                        <div class="progresss">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="percentage">
+                                <p>+81%</p>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+			</div>
+            <!-- Recent Orders  -->
+            <div class="recent-orders">
+                <h2>Registro de pagos</h2>
+                
+                <div class="notification add-reminder" style="display: flex;">
+					<div class="form-group caja">
+							<div class="input-group has-validation">
+								<label class="form-label"><b>Prestatario:</b></label>
+								<br>
+								<select id="idPrestatario" name="prestatario" class="form-control">
+								    <option value=" ">[Seleccione Prestatario]</option>
+									<option th:each="row:${prestatarios}" 
+											th:utext="${row.nombre}"
+											th:value="${row.codigo}"
+									/>
+								</select>
+							</div>
+					</div>
+					<div style="padding-left: 40px">
+						<button class="btn-agregar" id="btn-buscar">
+							<span class="material-icons-sharp">filter_alt</span>
+							<h3 class="title-button"><b>Filtrar</b></h3>
+						</button>
+					</div>
+					  
+				</div>
+				<!-- Recent Orders Table -->
+                <table id="tableProducto">
+                    <thead>
+                        <tr>
+							<th>Código cuota</th>
+                            <th>Código préstamo</th>
+                            <th>Prestatario</th>
+                            <th>Num. cuota</th>
+                            <th>Monto</th>
+                            <th>Fecha de vencimiento</th>
+                            <th>Estado</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<tr>
+							
+						</tr>
+						<!--
+						<tr th:each="row:${cuotasPagar}">
+							<td th:text="${row.prestamo.codigo}"></td>
+							<td th:text="${row.prestamo.prestatario.nombre}"></td>
+							<td th:text="${row.numero}"></td>
+							<td th:text="${row.monto}"></td>
+							<td th:text="${row.fechaPago}"></td>				
+							<td>
+							    <span th:if="${row.estado == 0}" style="color: yellow;">Pendiente</span>
+							    <span th:if="${row.estado == 1}" style="color: darkorange;">Parcialmente</span>
+							    <span th:if="${row.estado == 2}" style="color: green;">Pagado</span>
+							</td>
+							<td><button class="btn-editar custom-button"><span class="material-icons-sharp">visibility</span></button></td>
+						</tr>-->
+					</tbody>
+                </table>
+            </div>
+            <!-- End of Recent Orders -->
+            
+			
+            <!-- Paginación -->
+            <div class="pagination-container">
+			    <a class="prev">Anterior</a>
+			    <div class="pagination"></div>
+			    <a class="next">Siguiente</a>
+			</div>
+        </main>
+        <!-- End of Main Content -->
+        
+        <div class="modal" id="modalProducto">
+		        <form class="modal__container" id="idFormProducto" method="POST" action="/pago/grabar">
+						<h1 class="modal-title">Pago de cuota</h1>
+						<hr class="modal-hr">
+						<div>
+							<div>
+					   			<input hidden id="idCuotaFK" name="cuota" readonly value="0">
+							</div>	
+							<div>
+					   			<input hidden id="idMontoCuotaCompleta" name="montoCuota" readonly value="0">
+							</div>
+						</div>
+		            <div class="modal__inputs-2">
+						<div class="info">
+		                    <b style="display: flex;">Código del Préstamo: <p id="idPrestamo" style="margin-left: 5px;"></p></b>
+			            </div>
+			            <br>
+			            <div class="info">
+		                    <b style="display: flex;">Prestatario: <p id="idNombrePrestatario" style="margin-left: 5px;"></p></b>
+			            </div>
+			            <br>
+			            <div class="info">
+		                    <b style="display: flex;">Cuota: <p id="idCuota" style="margin-left: 5px;"></p></b>
+			            </div>
+			            <br>
+			            <div class="info">
+		                    <b style="display: flex;">Monto: <p id="idMonto" style="margin-left: 5px;"></p></b>
+		                    <input type="hidden" id="idMontoPago" name="monto">
+			            </div>
+			            <br>
+			            <div class="info">
+		                    <b style="display: flex;">Fecha de Vencimiento: <p id="idFecVen" style="margin-left: 5px;"></p></b>
+			            </div>
+			            <br>
+			            <div class="info">
+		                    <b style="display: flex;">Mora: <p id="idMora" name="mora" style="margin-left: 5px;"></p></b>
+		                    <input type="hidden" id="idMoraPago" name="mora">
+			            </div>
+			            <br>
+			            <div class="info">
+		                    <b style="display: flex;">Monto total a pagar: <p id="idMontoTotalaPagar" style="margin-left: 5px;"></p></b>
+			            </div>
+						<br>
+						<div class="form-group caja">
+						    <div class="input-group has-validation">
+						        <label class="form-label"><b>Ingrese monto:</b></label>
+						        <input type="text" class="form-control" name="pagar" id="idMontoPagar" autocomplete="off">
+						    </div>
+						</div>
+						
+						
+				      </div>
+				      <!-- Botones -->
+				      <div class="items-buttons">
+						  <button class="modal__close" id="btn-cerrar">Cerrar</button>
+						  <button class="modal__success" type="submit">Pagar</button>
+					  </div>   
+		        </form>
+		    </div>
+		    
+		    
+        <!-- Right Section -->
+        <div th:insert="~{plantilla/UITemplate :: section}"></div>
+    </div>
+    
+	<div th:insert="~{plantilla/UITemplate :: js}"></div>
+	<script th:src="@{/resources/js/pagination.js}"></script>
+	<script th:src="@{/resources/js/modal.js}"></script>
+	
+	 <!-- Right Section -->
+	<script th:inline="javascript" th:if="${MENSAJE!=null}">
+	    let msj;
+	    msj = /*[[${MENSAJE}]]*/
+	    Swal.fire({
+			/*position: 'bottom-end',*/
+	        position: 'top-end',
+	        icon: 'success',
+	        title: msj,
+	        showConfirmButton: false,
+	        timer: 1500
+	    });
+	</script>
+	
+	<script th:inline="javascript" th:if="${MENSAJE1!=null}">
+	    let msj1;
+	    msj1 = /*[[${MENSAJE1}]]*/
+	    Swal.fire({
+	        position: 'top-end',
+	        icon: 'error',
+	        title: msj1,
+	        showConfirmButton: false,
+	        timer: 1500
+	    });
+	</script>
+	
+
+	<!-- Acciones a los botones  -->
+	<script>
+		$(document).on("click","#btn-cerrar",function(){
+			$("#idFormProducto").trigger("reset");
+			$("#idFormProducto").data("bootstrapValidator").resetForm(true);
+			$("#idCodigo").val(0);
+			window.onbeforeunload = null;
+		});
+		
+		
+		$(document).on("click", ".btn-editar", function () {
+			let cod;
+			//obtener el codigo del medicamento actual según el boton que se presiono
+			cod = $(this).parents("tr").find("td")[0].innerHTML;
+			console.log(cod);
+			//trabajar con la funcion get para llmaar a la RUTA "buscar"
+			$.get("/pago/buscar?codigo=" + cod, function (response) {
+				console.log(response)
+				$("#idPrestamo").text(response.prestamo.codigo);
+				$("#idNombrePrestatario").text(response.prestamo.prestatario.nombre);
+				$("#idCuota").text(response.numero);
+				$("#idMonto").text(response.monto);
+				$("#idFecVen").text(response.fechaPago);
+				$("#idMora").text(response.mora);
+				$("#idMontoPago").val(response.monto);
+				$("#idMoraPago").val(response.mora);
+				$("#idCuotaPago").val(response.numero);
+				$("#idCuotaFK").val(response.codigo);
+				$("#idMontoCuotaCompleta").val(response.montoFijo);
+				var montoTotalPagar = response.mora + response.monto
+				$("#idMontoTotalaPagar").text(montoTotalPagar.toFixed(2));
+				/* Calcular y mostrar la mora en JavaScript
+				var fechaPago = new Date(response.fechaPago);
+				var hoy = new Date();
+				
+				// Asegurar que las fechas solo incluyan la fecha, sin horas, minutos, etc.
+				var hoyMedianoche = new Date(hoy);
+				hoyMedianoche.setHours(0, 0, 0, 0);
+				
+				var fechaPagoMedianoche = new Date(fechaPago);
+				fechaPagoMedianoche.setHours(0, 0, 0, 0);
+				
+				// Calcular los días transcurridos
+				var diasTranscurridos = Math.floor((hoyMedianoche - fechaPagoMedianoche) / (1000 * 60 * 60 * 24));
+				
+				// Calcular la tasa diaria (ajusta la lógica según tus necesidades)
+				var tasaMensual = 0.20;
+				var tasaDiaria = Math.pow((1 + tasaMensual), (1 / 30)) - 1;
+				
+				// Asegurarse de que la mora no sea negativa si no han pasado días desde la fecha de pago
+				var moraCalculada = diasTranscurridos > 0 ? response.monto * (Math.pow(1 + tasaDiaria, diasTranscurridos) - 1) : 0;
+				
+				$("#idMora").text(moraCalculada.toFixed(2));
+				*/
+			})
+		})
+			
+	</script>
+	<!--
+	<script>
+	    function calcularInteres() {
+	        var monto = parseFloat(document.getElementById('idMonto').value);
+	
+	        var dias = parseInt(document.getElementById('idDias').value);
+	
+	        var tasa = 20; // Esto sale del 20%
+	
+	        // Calculamos acá el interés diario y total (Clase de profe)
+	        var tasaDiaria = Math.pow((tasa / 100.0 + 1), (1 / 30.0)) - 1;
+	        var interes = monto * tasaDiaria * dias;
+	
+	        // Salida del interes, se va costrar en la etiqueta que tendra como id interesCalculado
+	        document.getElementById('interesCalculado').innerText = "S/ " + interes.toFixed(2);
+	    }
+	</script>
+	-->
+
+	<script>		
+		$(document).on("click", "#btn-buscar", function() {
+		    let codPrestario = $("#idPrestatario").val();
+		    console.log(codPrestario)
+		
+		    	const tableBody = document.querySelector("#tableProducto tbody");
+                tableBody.innerHTML = "";
+		
+		    $.get("/pago/filtrarPorPrestatario?prestatario="+codPrestario, function(response) {
+		        // Bucle
+		        $.each(response,function(index,item) {
+					$("#tableProducto").append(`<tr>
+							<td>${item.codigo}</td>
+		                    <td>${item.prestamo.codigo}</td>
+		                    <td>${item.prestamo.prestatario.nombre}</td>
+		                    <td>${item.numero}</td>
+		                    <td>${item.monto}</td>
+		                    <td>${item.fechaPago}</td>
+		                    <td style="color: ${
+							  item.estado === 0
+							    ? 'yellow'
+							    : item.estado === 1
+							    ? 'green'
+							    : '#ffcc00' // Color hexadecimal para 'otro-color'
+							  }">${item.estado === 0 ? 'Pendiente' : (item.estado === 1 ? 'Pagado' : 'Parcial')}</td>
+		                    <td><button class='btn-editar custom-button'><span class="material-icons-sharp">visibility</span></button></td>
+		                </tr>`)
+
+		        });
+		        showPage(currentPage);
+				createPagination();
+				updatePrevNextButtons()
+		        
+		    });
+		});
+	</script>
+	
+	<script>
+	    $(document).ready(function () {
+	        $('#idMontoPagar').on('input', function () {
+	            var mora = parseFloat($('#idMoraPago').val()) || 0;
+	            var monto = parseFloat($('#idMontoPago').val()) || 0;
+	    
+	            var pago = parseFloat($(this).val()) || 0;
+	    
+	            if (pago > (mora + monto)) {
+	                Swal.fire({
+	                    position: 'top-end',
+	                    icon: 'error',
+	                    title: 'Error',
+	                    text: 'El monto a pagar no puede ser mayor que la suma de mora y monto',
+	                    showConfirmButton: false,
+	                    timer: 1500
+	                });
+	    
+	                $(this).val((mora + monto).toFixed(2));
+	            }
+	    
+	            if (pago < 0) {
+	                Swal.fire({
+	                    position: 'top-end',
+	                    icon: 'error',
+	                    title: 'Error',
+	                    text: 'El monto a pagar no puede ser negativo',
+	                    showConfirmButton: false,
+	                    timer: 1500
+	                });
+	    
+	                $(this).val('0.00');
+	            }
+	
+	            if (mora > 0 && pago < mora) {
+	                Swal.fire({
+	                    position: 'top-end',
+	                    icon: 'error',
+	                    title: 'Error',
+	                    text: 'El monto a pagar no puede ser menor que la mora',
+	                    showConfirmButton: false,
+	                    timer: 1500
+	                });
+	
+	                $(this).val(mora.toFixed(2));
+	            }
+	        });
+	    });
+	</script>
+
+
+	
+	<script>
+		$(document).on("click", ".custom-button", function() {
+			modal.classList.add('modal--show');
+		});
+	</script>
+<!-- Validaciones -->
+<script>
+	$(document).ready(function () {
+		$('#idFormProducto').bootstrapValidator({    
+			feedbackIcons: {
+	                valid: 'glyphicon glyphicon-ok',
+	                invalid: 'glyphicon glyphicon-remove',
+	                validating: 'glyphicon glyphicon-refresh'
+	            }
+		});
+
+		$('#modalProducto').on('hidden.bs.modal', function() {
+			$("#idFormProducto").bootstrapValidator('resetForm', true);
+			$("#idCodigo").val(0);
+		});
+	});
+</script>
+	
+</body>
+</html>

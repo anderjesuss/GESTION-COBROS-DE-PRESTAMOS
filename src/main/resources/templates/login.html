@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link th:href="@{/resources/css/styleLogin.css}" rel="stylesheet">
+    <script th:src="@{/resources/sweetalert/sweetalertLogin.js}"></script>
+    <title>Login</title>
+</head>
+<body>
+    <div class="contenido">
+        <form class="form signup" id="FormLogin" method="post" th:action="@{/validar/usuario}">
+            <h2>Iniciar Sesión</h2>
+            <div class="inputBox">
+                <input type="text" id="idCorreo" name="username" required autocomplete="off">
+                <i class="fa-solid fa-envelope"></i>
+                <span>Correo electrónico</span>
+                <p class="error" id="correoError" >Por favor, ingrese correo</p>
+                <p class="errorIniciarSesion" th:if="${param.error}">Correo o contraseñas incorrectos</p>
+            </div>
+            <div class="inputBox">
+                <input type="password" id="idContraseña" name="password" required>
+                <i class="fa-solid fa-lock"></i>
+                <span>Contraseña</span>
+            </div>
+            <div class="inputBox">
+                <input type="submit" value="Iniciar Sesión">
+            </div>
+            <p class="info">¿ No Tienes una cuenta ? <a th:href="@{/validar/register}" class="login">Registratre Aquí</a></p>
+        </form>
+    </div>
+    
+    <script th:src="@{/resources/js/JsLogin.js}"></script>
+    
+    <script th:inline="javascript" th:if="${param.logout}">
+	    Swal.fire({
+			/*position: 'bottom-end',*/
+	        position: 'top-end',
+	        icon: 'success',
+	        title: 'Sesión terminada',
+	        showConfirmButton: false,
+	        timer: 1500
+	    });
+	</script>
+	
+</body>
+</html>

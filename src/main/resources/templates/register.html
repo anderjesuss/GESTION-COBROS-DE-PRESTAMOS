@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link th:href="@{/resources/css/styleRegister.css}" rel="stylesheet">
+    <title>Login</title>
+</head>
+<body>
+    <div class="contenido">
+        <form class="form signup" id="FormRegister">
+            <h2>Registrarse</h2>
+            <div class="contenido-cajas">
+				<div class="inputBox">
+	                <input type="text" id="idNombre" autocomplete="off" name="nombre" required>
+	                <i class="fa-solid fa-user"></i>
+	                <span>Nombres</span>
+	                <p class="error" id="nombresError">Por favor, ingrese sus nombres</p>
+	            </div>
+	            <div class="inputBox">
+	                <input type="text" id="idApellido" autocomplete="off" name="apellido" required>
+	                <i class="fa-solid fa-user"></i>
+	                <span>Apellidos</span>
+	                <p class="error" id="apellidosError">Por favor, ingrese sus apellidos</p>
+	            </div>
+	            <div class="inputBox">
+	                <input type="text" id="idDni" autocomplete="off" name="dni" required>
+	                <i class="fa-solid fa-address-card"></i>
+	                <span>DNI</span>
+	                <p class="error" id="dniError">Por favor, ingrese su dni</p>
+	            </div>
+	            <div class="inputBox">
+	                <input type="text" id="idTelefono" autocomplete="off" name="telefono" required>
+	                <i class="fa-solid fa-phone"></i>
+	                <span>Teléfono</span>
+	                <p class="error" id="telefonoError">Por favor, ingrese número de teléfono</p>
+	            </div>
+				<div class="inputBox">
+	                <input type="text" id="idCorreo" autocomplete="off" name="correo" required>
+	                <i class="fa-solid fa-envelope"></i>
+	                <span>Correo electrónico</span>
+	                <p class="error" id="correoError">Por favor, ingrese un correo válido</p>
+	            </div>
+	            <div class="inputBox">
+	                <input type="password" id="idContraseña" autocomplete="off" name="password" required>
+	                <i class="fa-solid fa-lock"></i>
+	                <span>Crear contraseña</span>
+	                <p class="error" id="contrasenaError">Por favor, ingrese una contraseña</p>
+	            </div>
+	            <div class="inputBox">
+	                <input type="password" id="idConfirmarContraseña" autocomplete="off" required>
+	                <i class="fa-solid fa-lock"></i>
+	                <span>Confirmar contraseña</span>
+	                <p class="error" id="confirmarContrasenaError">Por favor, confirme su contraseña</p>
+	                <p class="error" id="contraseñaNoIgualError">Las contraseñas no coinciden</p>
+	            </div>
+			</div>
+            
+            <div class="inputBox">
+                <input type="submit" value="Create Account">
+            </div>
+            <p class="info">¿ Ya tienes una cuenta ? <a th:href="@{/validar/usuario}" class="login">Iniciar Sesión</a></p>
+        </form>
+    </div>
+    
+    <script th:src="@{/resources/js/JsRegister.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:fragment="cabecera">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:href="@{/resources/css/fontsgoogleapis.css}" rel="stylesheet">
+    <link th:href="@{/resources/datepicker/bootstrap-datepicker.css}" rel="stylesheet">
+    <link th:href="@{/resources/css/style.css}" rel="stylesheet">
+    <link th:href="@{/resources/css/stylePagination.css}" rel="stylesheet">
+    <link th:href="@{/resources/css/styleButton.css}" rel="stylesheet">
+    <link th:href="@{/resources/css/styleModal.css}" rel="stylesheet">
+    <script th:src="@{/resources/js/validaciones.js}"></script>
+    <script th:src="@{/resources/js/validaciones2.js}"></script>
+    <script th:src="@{/resources/sweetalert/sweetalert.js}"></script>
+    
+    
+    <title th:text="${pageTitle}">Default Title</title>
+    
+    <style>
+		div:where(.swal2-container) div:where(.swal2-popup) {
+		    color: var(--color-dark);
+		}
+		.swal2-success-circular-line-right {
+			background-color: var(--color-white) !important;
+		}
+		.swal2-success-circular-line-left {
+			background-color: var(--color-white) !important;
+		}
+		.swal2-success-fix {
+			background-color: var(--color-white) !important;
+		}	
+	</style>
+</head>
+
+<body>
+	
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside th:fragment="sidebar">
+            <div class="toggle">
+                <div class="logo">
+                    <h2>Home<span class="danger">Credit</span></h2>
+                </div>
+                <div class="close" id="close-btn">
+                    <span class="material-icons-sharp">
+                        close
+                    </span>
+                </div>
+            </div>
+
+            <div class="sidebar">
+				<a th:href="@{/validar/dashboard}">
+                    <span class="material-icons-sharp">
+                        dashboard
+                    </span>
+                    <h3>Dashboard</h3>
+                </a>
+                
+                <a th:each="row:${session.enlaces}" th:href="${row.ruta}">
+                    <span class="material-icons-sharp">
+                        <p th:text="${row.icon}"></p>
+                    </span>
+                    <h3 th:text="${row.descripcion}"></h3>
+                </a>
+                
+                <a th:href="@{/logout}">
+                    <span class="material-icons-sharp">
+                        logout
+                    </span>
+                    <h3>Logout</h3>
+                </a>
+            </div>
+        </aside>
+        <!-- End of Sidebar Section -->
+
+        <!-- Right Section -->
+        <div class="right-section" th:fragment="section">
+            <div class="nav">
+                <button id="menu-btn">
+                    <span class="material-icons-sharp">
+                        menu
+                    </span>
+                </button>
+                <div class="dark-mode">
+                    <span class="material-icons-sharp active">
+                        light_mode
+                    </span>
+                    <span class="material-icons-sharp">
+                        dark_mode
+                    </span>
+                </div>
+
+                <div class="profile">
+                    <div class="info">
+                        <p>Hello, <b th:text="${session.datosUsuario}"></b></p>
+                        <small class="text-muted" th:text="${session.tipoUsuario}"></small>
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Nav -->
+
+            <div class="user-profile">
+                <div class="logo">
+                    <img th:src="@{/resources/img/logo.png}">
+                    <h2>LAAPS MiCo</h2>
+                    <p>Backend Junior Developers</p>
+                </div>
+            </div>
+			
+			<div class="sales">
+				<div class="reminders">
+                <div class="header">
+                    <h2>Reminders</h2>
+                    <span class="material-icons-sharp">
+                        notifications_none
+                    </span>
+                </div>
+
+                <div class="notification">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            volume_up
+                        </span>
+                    </div>
+                    <div class="content">
+                        <div class="info">
+                            <h3>Workshop</h3>
+                            <small class="text_muted">
+                                08:00 AM - 12:00 PM
+                            </small>
+                        </div>
+                        <span class="material-icons-sharp">
+                            more_vert
+                        </span>
+                    </div>
+                </div>
+
+                <div class="notification deactive">
+                    <div class="icon">
+                        <span class="material-icons-sharp">
+                            edit
+                        </span>
+                    </div>
+                    <div class="content">
+                        <div class="info">
+                            <h3>Workshop</h3>
+                            <small class="text_muted">
+                                08:00 AM - 12:00 PM
+                            </small>
+                        </div>
+                        <span class="material-icons-sharp">
+                            more_vert
+                        </span>
+                    </div>
+                </div>
+
+                <div class="notification add-reminder">
+                    <div>
+                        <span class="material-icons-sharp">
+                            add
+                        </span>
+                        <h3>Add Reminder</h3>
+                    </div>
+                </div>
+
+            </div>
+				
+				
+			</div>
+            
+
+        </div>
+
+    </div>
+	
+    <div th:fragment="js">
+		<script th:src="@{/resources/js/bootstrapValidator.js}"></script>
+		<script th:src="@{/resources/js/index.js}"></script>
+    	<script th:src="@{/resources/js/actionButton.js}"></script>
+    	<script th:src="@{/resources/datepicker/bootstrap-datepicker.js}"></script>
+    	
+	</div>
+</body>
+
+</html>

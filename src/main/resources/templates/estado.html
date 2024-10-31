@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="~{plantilla/UITemplate :: cabecera(pageTitle='Estado de Préstamos')}">
+
+<body>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside th:insert="~{plantilla/UITemplate :: sidebar}"></aside>
+        <!-- End of Sidebar Section -->
+        
+        <!-- Main Content -->
+        <main>
+            <h1>Información</h1>
+            <div class="analyse">
+				<div class="sales">
+                    <div class="status">
+                        <div class="info">
+                            <h3>Total de Prestamos</h3>
+                            <h1 style="text-align: center;" th:text="${totalprestamoss}"></h1>
+                        </div>
+                        <div class="progresss">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="percentage">
+                                <p>+81%</p>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+			</div>
+            <!-- Recent Orders  -->
+            <div class="recent-orders">
+                <h2>Consulta de Préstamos</h2>
+                
+                <div class="notification add-reminder" style="display: flex;">
+					<div class="form-group caja">
+							<div class="input-group has-validation">
+								<label class="form-label"><b>Prestamista:</b></label>
+								<select id="idPrestamista" name="prestamista" class="form-control">
+								    <option value=" ">[Seleccione Prestamista]</option>
+									<option th:each="row:${prestamistas}" 
+											th:utext="${row.nombre + ' ' + row.apellido}"
+											th:value="${row.codigo}"
+									/>
+								</select>
+							</div>
+					</div>
+					<div style="padding-left: 40px">
+						<button class="btn-agregar" id="btn-buscar">
+							<span class="material-icons-sharp">filter_alt</span>
+							<h3 class="title-button"><b>Filtrar</b></h3>
+						</button>
+					</div>
+					  
+				</div>
+				<!-- Recent Orders Table -->
+                <table id="tableProducto">
+                    <thead>
+                        <tr>
+                            <th>Código de Préstamo</th>
+			                <th>Nombre del Prestatario</th>
+			                <th>Monto del Préstamo</th>
+			                <th>Número de Cuotas Generadas</th>
+			                <th>Cuotas Pagadas</th>
+			                <th>Cuotas Pendientes</th>
+			                <th>Monto Pagado</th>
+			                <th>Monto Pendiente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+						<tr>
+							
+						</tr>
+						<!--
+						<tr th:each="row:${estadoPrestamos}">
+							<td th:text="${row.codigoPrestamo}"></td>
+							<td th:text="${row.nombrePrestatario}"></td>
+							<td th:text="${row.montoPrestamo}"></td>
+							<td th:text="${row.numeroCuotas}"></td>
+							<td th:text="${row.cuotasPagadas}"></td>
+							<td th:text="${row.cuotasPendientes}"></td>
+							<td th:text="${row.montoPagado}"></td>
+							<td th:text="${row.montoPendiente}"></td>
+						</tr>
+						-->
+					</tbody>
+                </table>
+            </div>
+            <!-- End of Recent Orders -->
+            
+			
+            <!-- Paginación -->
+            <div class="pagination-container">
+			    <a class="prev">Anterior</a>
+			    <div class="pagination"></div>
+			    <a class="next">Siguiente</a>
+			</div>
+        </main>
+ 
+		    
+        <!-- Right Section -->
+        <div th:insert="~{plantilla/UITemplate :: section}"></div>
+    </div>
+    
+	<div th:insert="~{plantilla/UITemplate :: js}"></div>
+	<script th:src="@{/resources/js/pagination.js}"></script>
+	
+
+	<script>		
+		$(document).on("click", "#btn-buscar", function() {
+		    let codPrestamista = $("#idPrestamista").val();
+		    console.log(codPrestamista)
+		
+		    	const tableBody = document.querySelector("#tableProducto tbody");
+                tableBody.innerHTML = "";
+		
+		    $.get("/estado/filtrarPorPrestamista?prestamista="+codPrestamista, function(response) {
+		        // Bucle
+		        $.each(response,function(index,item) {
+					$("#tableProducto").append(`<tr>
+		                    <td>${item.codigoPrestamo}</td>
+		                    <td>${item.nombrePrestatario}</td>
+		                    <td>${item.montoPrestamo}</td>
+		                    <td>${item.numeroCuotas}</td>
+		                    <td>${item.cuotasPagadas}</td>
+		                    <td>${item.cuotasPendientes}</td>
+		                    <td>${item.montoPagado}</td>
+		                    <td>${item.montoPendiente}</td>
+		                </tr>`)
+
+		        });
+		        showPage(currentPage);
+				createPagination();
+				updatePrevNextButtons()
+		        
+		    });
+		});
+	</script>
+	
+	<script>
+		$(document).on("click", ".custom-button", function() {
+			modal.classList.add('modal--show');
+		});
+	</script>
+	
+</body>
+</html>

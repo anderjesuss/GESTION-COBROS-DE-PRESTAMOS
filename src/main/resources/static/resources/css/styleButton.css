@@ -1,0 +1,112 @@
+/* Estilos para el botón personalizado */
+.btn-agregar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.2rem;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--card-border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.btn-agregar:hover {
+  background-color: var(--color-dark-variant);
+}
+
+.btn-agregar .material-icons-sharp {
+  font-size: 1.6rem;
+}
+
+.notification.add-reminder .content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  width: 100%;
+}
+
+.notification.add-reminder .icon {
+  padding: 0.6rem;
+  color: var(--color-white);
+  background-color: var(--color-success);
+  border-radius: 20%;
+  display: flex;
+}
+
+.notification.add-reminder.deactive .icon {
+  background-color: var(--color-danger);
+}
+
+.notification.add-reminder .add-reminder {
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-grow: 1;
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--card-border-radius);
+  border: 2px solid var(--color-primary);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.notification.add-reminder:hover .add-reminder {
+  color: var(--color-white);
+  background-color: var(--color-primary);
+}
+
+.notification.add-reminder:active .btn-agregar {
+  background-color: var(--color-dark-variant);
+}
+
+.btn-editar {
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.2rem;
+  background-color: var(--color-success);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--card-border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.btn-editar:hover {
+  background-color: var(--color-green-variant);
+}
+
+.btn-editar .material-icons-sharp {
+  font-size: 1.6rem;
+}
+
+.btn-eliminar {
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1.2rem;
+  background-color: var(--color-danger);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--card-border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.btn-eliminar:hover {
+  background-color: var(--color-danger-variant);
+}
+
+.btn-eliminar .material-icons-sharp {
+  font-size: 1.6rem;
+}
+
+.notification.add-reminder:active .btn-eliminar {
+  background-color: var(--color-danger-variant);
+}

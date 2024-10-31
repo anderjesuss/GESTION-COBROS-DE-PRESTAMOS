@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:insert="~{plantilla/UITemplate :: cabecera(pageTitle='Rendimiento Financiero')}">
+
+<body>
+    <div class="container">
+        <!-- Sidebar Section -->
+        <aside th:insert="~{plantilla/UITemplate :: sidebar}"></aside>
+        <!-- End of Sidebar Section -->
+        
+        <!-- Main Content -->
+        <main>
+            <h1>Información</h1>
+            <div class="analyse">
+				<div class="sales">
+                    <div class="status">
+                        <div class="info">
+                            <div style="display: flex;">
+                                <h3>Rentabilidad del grupo </h3><h3 id="codigoGrupo"></h3>
+                            </div>                            
+                            <h1 style="text-align: center;" id="totalRentabilidadGrupo"></h1>
+                        </div>
+                        <div class="progresss">
+                            <svg>
+                                <circle cx="38" cy="38" r="36"></circle>
+                            </svg>
+                            <div class="percentage">
+                                <p>+81%</p>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+			</div>
+            <!-- Recent Orders  -->
+            <div class="recent-orders">
+                <h2>Consulta de Cuotas</h2>
+                
+                <div class="notification add-reminder" style="display: flex;">
+					<div class="form-group caja">
+							<div class="input-group has-validation">
+								<label class="form-label"><b>Jefe Prestamista:</b></label>
+								<select id="idJefePrestamista" name="jefeprestamista" class="form-control" style="width: 75%;">
+								    <option value=" ">[Seleccione Jefe Prestamista]</option>
+									<option th:each="row:${jefeprestamistas}" 
+											th:utext="${row.nombre + ' ' + row.apellido}"
+											th:value="${row.grupo.codigo}"
+									/>
+								</select>
+							</div>
+					</div>
+					<div style="padding-left: 40px">
+						<button class="btn-agregar" id="btn-buscar" style="margin-top: 10px;">
+							<span class="material-icons-sharp">filter_alt</span>
+							<h3 class="title-button"><b>Filtrar</b></h3>
+						</button>
+					</div>
+					  
+				</div>
+				<!-- Recent Orders Table -->
+                <table id="tableProducto">
+                    <thead>
+                        <tr>
+							<th>Codigo Prestamista</th>
+			                <th>Nombre</th>
+			                <th>Monto total prestado</th>
+			                <th>Interes total</th>
+			                <th>Monto pagado</th>
+			                <th>Monto pendiente</th>
+			                <th>Mora total</th>
+			                <th>Rentabilidad</th>
+			            </tr>
+                    </thead>
+                    <tbody>
+						<tr>
+							
+						</tr>
+						<!--
+						<tr th:each="row:${estadoPrestamos}">
+							<td th:text="${row.codigoPrestamo}"></td>
+							<td th:text="${row.nombrePrestatario}"></td>
+							<td th:text="${row.montoPrestamo}"></td>
+							<td th:text="${row.numeroCuotas}"></td>
+							<td th:text="${row.cuotasPagadas}"></td>
+							<td th:text="${row.cuotasPendientes}"></td>
+							<td th:text="${row.montoPagado}"></td>
+							<td th:text="${row.montoPendiente}"></td>
+						</tr>
+						-->
+					</tbody>
+                </table>
+            </div>
+            <!-- End of Recent Orders -->
+            
+			
+            <!-- Paginación -->
+            <div class="pagination-container">
+			    <a class="prev">Anterior</a>
+			    <div class="pagination"></div>
+			    <a class="next">Siguiente</a>
+			</div>
+        </main>
+ 
+		    
+        <!-- Right Section -->
+        <div th:insert="~{plantilla/UITemplate :: section}"></div>
+    </div>
+    
+	<div th:insert="~{plantilla/UITemplate :: js}"></div>
+	<script th:src="@{/resources/js/pagination.js}"></script>
+	
+	<script>		
+		$(document).on("click", "#btn-buscar", function() {
+		    let codGrupoJefePrestamista = $("#idJefePrestamista").val();
+		    //validacion
+		    if (codGrupoJefePrestamista === null || codGrupoJefePrestamista.trim() === "") {
+	            Swal.fire({
+	                position: 'top-end',
+	                icon: 'error',
+	                title: 'Seleccione Jefe prestamista',
+	                showConfirmButton: false,
+	                timer: 1500
+	            });
+	            return; // Stop execution if validation fails
+	        }
+	
+		    console.log(codGrupoJefePrestamista)
+		
+		    	const tableBody = document.querySelector("#tableProducto tbody");
+                tableBody.innerHTML = "";
+		
+		    $.get("/rendimiento/filtrarRendimiento?grupo=" + codGrupoJefePrestamista, function(response) {
+			    // Variables para almacenar totales
+			    let totalMontoTotalPrestamos = 0;
+			    let totalInteresTotal = 0;
+			    let totalMontoPagado = 0;
+			    let totalMontoPendiente = 0;
+			    let totalMoraTotal = 0;
+			    let totalRentabilidadPorcentaje = 0;
+			
+			    // Bucle
+			    $.each(response, function(index, item) {
+			        $("#tableProducto").append(`<tr>
+			                <td>${item.cod_prestamista}</td>
+			                <td>${item.nombre_prestamista}</td>
+			                <td>${item.monto_total_prestamos}</td>
+			                <td>${item.interes_total}</td>
+			                <td>${item.monto_pagado}</td>
+			                <td>${item.monto_pendiente}</td>
+			                <td>${item.mora_total}</td>
+			                <td>${item.rentabilidad_porcentaje}%</td>
+			            </tr>`);
+			
+			        // Acumular totales
+			        totalMontoTotalPrestamos += parseFloat(item.monto_total_prestamos);
+			        totalInteresTotal += parseFloat(item.interes_total);
+			        totalMontoPagado += parseFloat(item.monto_pagado);
+			        totalMontoPendiente += parseFloat(item.monto_pendiente);
+			        totalMoraTotal += parseFloat(item.mora_total);
+			        totalRentabilidadPorcentaje += parseFloat(item.rentabilidad_porcentaje);
+			    });
+			
+			    // Agregar fila de totales
+			    $("#tableProducto").append(`<tr>
+			            <td></td>
+			            <td class="total">Total</td>
+			            <td class="total">${totalMontoTotalPrestamos}</td>
+			            <td class="total">${totalInteresTotal}</td>
+			            <td class="total">${totalMontoPagado}</td>
+			            <td class="total">${totalMontoPendiente}</td>
+			            <td class="total">${totalMoraTotal}</td>
+			            <td class="total">${totalRentabilidadPorcentaje.toFixed(2)}%</td>
+			        </tr>`);
+			        $("#totalRentabilidadGrupo").text(totalRentabilidadPorcentaje.toFixed(2) + "%");
+			        $("#codigoGrupo").text(codGrupoJefePrestamista);
+			});
+
+		});
+	</script>
+	
+	<script>
+		$(document).on("click", ".custom-button", function() {
+			modal.classList.add('modal--show');
+		});
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head th:insert="~{plantilla/UITemplate :: cabecera(pageTitle='Dashboard')}">
+<title>Intranet</title>
+
+</head>
+<body>
+	<div class="container">
+		<!-- consumir fragmento cabecera-->
+		<div th:insert="~{plantilla/UITemplate :: sidebar}"></div>	
+		
+		<main>
+	            <h1>Información</h1>
+	            <div class="analyse">
+					<div class="sales">
+	                    <div class="status">
+	                        <div class="info">
+	                            <h3>Total de Prestamistas</h3>
+	                            <h1 style="text-align: center;" th:text="${totalPrestamistas}"></h1>
+	                        </div>
+	                        <div class="progresss">
+	                            <svg>
+	                                <circle cx="38" cy="38" r="36"></circle>
+	                            </svg>
+	                            <div class="percentage">
+	                                <p>+81%</p>
+	                            </div>
+	                        </div>
+	                    </div>
+	                 </div>
+	              <!--PC1-RUBINA -->
+	                 <div class="sales">
+	                    <div class="status">
+	                        <div class="info">
+	                            <h3>Total de Jefe Prestamistas</h3>
+	                            <h1 style="text-align: center;" th:text="${totalJefePrestamistas}"></h1>
+	                        </div>
+	                        <div class="progresss">
+	                            <svg>
+	                                <circle cx="38" cy="38" r="36"></circle>
+	                            </svg>
+	                            <div class="percentage">
+	                                <p>+81%</p>
+	                            </div>
+	                        </div>
+	                    </div>
+	                 </div>
+               	 <!--PC1-Sanchez-Rivera -->
+	                 <div class="sales">
+	                    <div class="status">
+	                        <div class="info">
+	                            <h3>Total de Prestatario</h3>
+	                            <h1 style="text-align: center;" th:text="${totalPrestatarios}"></h1>
+	                        </div>
+	                        <div class="progresss">
+	                            <svg>
+	                                <circle cx="38" cy="38" r="36"></circle>
+	                            </svg>
+	                            <div class="percentage">
+	                                <p>+81%</p>
+	                            </div>
+	                        </div>
+	                    </div>
+	                 </div>
+				</div>
+	        </main>
+	
+		<div th:insert="~{plantilla/UITemplate :: section}"></div>
+	</div>
+	<div th:insert="~{plantilla/UITemplate :: js}"></div>
+	
+</body>
+</html>
+
